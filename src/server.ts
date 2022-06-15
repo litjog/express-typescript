@@ -10,9 +10,11 @@ const PORT = normalizePort(process.env.PORT || 5500);
 const app: Express = express();
 const server: Server = http.createServer(app);
 
+app.set('port', PORT);
+
 app.use('/', indexRoutes);
 
-server.listen(PORT);
+server.listen(app.get('port'));
 server.on('error', onError);
 server.on('listening', onListening);
 
