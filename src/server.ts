@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import http, { Server } from 'http';
 import dotenv from 'dotenv';
 
-import indexRoutes from './router';
+import routes from './routes';
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ const server: Server = http.createServer(app);
 
 app.set('port', PORT);
 
-app.use('/', indexRoutes);
+app.use('/', routes);
 
 server.listen(app.get('port'));
 server.on('error', onError);
