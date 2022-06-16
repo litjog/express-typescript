@@ -1,4 +1,4 @@
-# Express js application using TypeScript and Webpack
+# Express JS application using TypeScript and Webpack
 
 ## Get started
 
