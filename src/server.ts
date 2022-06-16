@@ -1,8 +1,12 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import http, { Server } from 'http';
+import morgan from 'morgan';
+import compression from 'compression';
+import cors from 'cors';
 import dotenv from 'dotenv';
 
-import routes from './routes';
+import apiRoutes from './routes/apiRoutes';
+import HttpError, { Error } from './httpError';
 
 dotenv.config();
 
@@ -12,7 +16,35 @@ const server: Server = http.createServer(app);
 
 app.set('port', PORT);
 
-app.use('/', routes);
+app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common'));
+app.use(compression());
+app.use(cors());
+app.use(express.json());
+
+app.use('/api', apiRoutes);
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  next(new HttpError('Not found', 404));
+});
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  const message = err.message;
+
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    next(new HttpError(message, 400));
+    return;
+  }
+
+  next(new HttpError(message || 'Internal error', err.code || 500));
+});
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.code).json({
+    success: err.success,
+    code: err.code,
+    message: err.message,
+  });
+});
 
 server.listen(app.get('port'));
 server.on('error', onError);
