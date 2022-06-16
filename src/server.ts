@@ -35,13 +35,13 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  next(new HttpError(message || 'Internal error', err.code || 500));
+  next(new HttpError(message || 'Internal error', err.status || 500));
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(err.code).json({
+  res.status(err.status).json({
     success: err.success,
-    code: err.code,
+    status: err.status,
     message: err.message,
   });
 });
