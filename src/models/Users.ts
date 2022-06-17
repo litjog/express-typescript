@@ -10,6 +10,13 @@ export interface User {
   updatedAt: string;
 }
 
+interface Where {
+  id?: number;
+  username?: string;
+  name?: string;
+  age?: number;
+}
+
 export default class Users {
   private currentId: number = 1;
   private list: User[] = [];
@@ -56,7 +63,7 @@ export default class Users {
     const user = this.selectById(id);
 
     if (this.isExist({ username })) {
-      if (user.username !== username) {
+      if (user?.username !== username) {
         throw new HttpError('Username already registered', 400);
       }
     }
@@ -83,16 +90,13 @@ export default class Users {
     return this.list;
   }
 
-  public selectMany(where: { name?: string; age?: number }): User[] {
-    const key = Object.keys(where)[0];
+  public selectMany(where: Where): User[] {
+    const key = Object.keys(where)[0] as keyof Where;
     return this.list.filter((user: User) => user[key] === where[key]);
   }
 
-  public selectOne(where: {
-    id?: number;
-    username?: string;
-  }): User | undefined {
-    const key = Object.keys(where)[0];
+  public selectOne(where: Where): User | undefined {
+    const key = Object.keys(where)[0] as keyof Where;
     return this.list.find((user: User) => user[key] === where[key]);
   }
 
@@ -104,8 +108,8 @@ export default class Users {
     return this.selectOne({ id });
   }
 
-  public isExist(where: { id?: number; username?: string }): boolean {
-    const key = Object.keys(where)[0];
+  public isExist(where: Where): boolean {
+    const key = Object.keys(where)[0] as keyof Where;
     return this.list.some((user: User) => user[key] === where[key]);
   }
 

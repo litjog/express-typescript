@@ -82,7 +82,7 @@ function getPortType() {
   const address = server.address();
   return typeof address === 'string'
     ? `pipe ${address}`
-    : `port ${address.port}`;
+    : `port ${address?.port}`;
 }
 
 function normalizePort(val: number | string) {
