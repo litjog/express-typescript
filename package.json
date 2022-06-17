@@ -1,15 +1,20 @@
 {
   "name": "nodejs-express-webpack",
   "version": "1.0.0",
-  "description": "",
+  "description": "Express JS application using Typescript and Webpack",
   "main": "build/index.js",
   "scripts": {
     "start": "node build/index.js",
     "dev": "nodemon src/server.ts",
     "build": "webpack"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Node.js",
+    "Express JS",
+    "TypeScript",
+    "Webpack"
+  ],
+  "author": "litjog",
   "license": "MIT",
   "dependencies": {
     "compression": "^1.7.4",
