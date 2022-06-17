@@ -96,7 +96,7 @@ export default class Users {
   }
 
   public selectOne(where: Where): User | undefined {
-    const [key] = Object.keys(where) as [keyof Where];
+    const [key] = Object.keys(where) as (keyof Where)[];
     return this.list.find((user: User) => user[key] === where[key]);
   }
 
@@ -109,7 +109,7 @@ export default class Users {
   }
 
   public isExist(where: Where): boolean {
-    const [key] = Object.keys(where) as [keyof Where];
+    const [key] = Object.keys(where) as (keyof Where)[];
     return this.list.some((user: User) => user[key] === where[key]);
   }
 
