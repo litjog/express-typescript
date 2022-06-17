@@ -2,6 +2,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import http, { Server } from 'http';
 import morgan from 'morgan';
 import compression from 'compression';
+import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -18,6 +19,7 @@ app.set('port', PORT);
 
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common'));
 app.use(compression());
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
