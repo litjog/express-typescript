@@ -48,11 +48,15 @@ export async function getUser(
   }
 }
 
-export function updateUser(req: Request, res: Response, next: NextFunction) {
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const id = Number(req.params.id);
     const { name, username, age } = req.body;
-    const user = users.update({ id, name, username, age });
+    const user = await users.update({ id, name, username, age });
 
     res.status(200).json({ success: true, user });
   } catch (e) {
@@ -60,10 +64,14 @@ export function updateUser(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export function deleteUser(req: Request, res: Response, next: NextFunction) {
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const id = Number(req.params.id);
-    users.delete(id);
+    await users.delete(id);
 
     res.status(200).json({ success: true });
   } catch (e) {
