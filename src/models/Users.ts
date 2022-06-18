@@ -17,6 +17,12 @@ interface Where {
   age?: number;
 }
 
+interface CallbackFn {
+  (user: Pick<Where, 'name' | 'age'>): boolean;
+}
+
+type WhereUnique = Pick<Where, 'id' | 'username'>;
+
 export default class Users {
   private currentId: number = 1;
   private list: User[] = [];
@@ -90,13 +96,12 @@ export default class Users {
     return this.list;
   }
 
-  public selectMany(where: Where): User[] {
-    const [key] = Object.keys(where) as Array<keyof Where>;
-    return this.list.filter((user: User) => user[key] === where[key]);
+  public selectMany(callbackFn: CallbackFn): User[] {
+    return this.list.filter(({ name, age }: User) => callbackFn({ name, age }));
   }
 
-  public selectOne(where: Where): User | undefined {
-    const [key] = Object.keys(where) as (keyof Where)[];
+  public selectOne(where: WhereUnique): User | undefined {
+    const [key] = Object.keys(where) as (keyof WhereUnique)[];
     return this.list.find((user: User) => user[key] === where[key]);
   }
 
@@ -108,8 +113,8 @@ export default class Users {
     return this.selectOne({ id });
   }
 
-  public isExist(where: Where): boolean {
-    const [key] = Object.keys(where) as (keyof Where)[];
+  public isExist(where: WhereUnique): boolean {
+    const [key] = Object.keys(where) as (keyof WhereUnique)[];
     return this.list.some((user: User) => user[key] === where[key]);
   }
 
