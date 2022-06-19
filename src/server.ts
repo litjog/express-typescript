@@ -5,6 +5,7 @@ import compression from 'compression';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { ZodError } from 'zod';
 
 import apiRoutes from './routes/apiRoutes';
 import HttpError, { Error } from './httpError';
@@ -37,6 +38,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
+  if (err instanceof ZodError) {
+    const issues = err.errors.map((error) => ({
+      prop: error.path[0],
+      message: error.message,
+    }));
+
+    next(new HttpError('Unprocessable entity', 422, issues));
+    return;
+  }
+
   next(new HttpError(message || 'Internal error', err.status || 500));
 });
 
@@ -45,6 +56,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     success: err.success,
     status: err.status,
     message: err.message,
+    issues: err?.issues,
   });
 });
 

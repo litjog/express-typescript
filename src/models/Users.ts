@@ -1,3 +1,5 @@
+import { ZodError } from 'zod';
+import userSchema from '../common/userSchema';
 import getCurrentDate from '../helpers/getCurrentDate';
 import HttpError from '../httpError';
 
@@ -38,17 +40,23 @@ export default class Users {
     username: string;
     age: number;
   }): User {
-    if (this.isExist({ username })) {
-      throw new HttpError('User already registered', 400);
+    try {
+      const userInput = userSchema.parse({ name, username, age });
+
+      if (this.isExist({ username: userInput.username })) {
+        throw new HttpError('User already registered', 409);
+      }
+
+      const id: number = this.currentId++;
+      const createdAt: string = getCurrentDate();
+      const updatedAt: string = createdAt;
+      const user: User = { id, createdAt, updatedAt, ...userInput };
+
+      this.list.push(user);
+      return user;
+    } catch (e) {
+      throw e;
     }
-
-    const id: number = this.currentId++;
-    const createdAt: string = getCurrentDate();
-    const updatedAt: string = createdAt;
-    const user: User = { id, name, username, age, createdAt, updatedAt };
-
-    this.list.push(user);
-    return user;
   }
 
   public update({
@@ -62,34 +70,39 @@ export default class Users {
     username: string;
     age: number;
   }): User | undefined {
-    if (!this.isExist({ id })) {
-      throw new HttpError('User not found', 404);
-    }
-
-    const user = this.selectById(id);
-
-    if (this.isExist({ username })) {
-      if (user?.username !== username) {
-        throw new HttpError('Username already registered', 400);
+    try {
+      if (!this.isExist({ id })) {
+        throw new HttpError('User not found', 404);
       }
-    }
 
-    const updatedUser: User | undefined = this.list.find(
-      (user: User): boolean => {
-        const isMatch: boolean = user.id === id;
+      const user = this.selectById(id);
+      const userInput = userSchema.parse({ name, username, age });
 
-        if (isMatch) {
-          user.name = name;
-          user.username = username;
-          user.age = age;
-          user.updatedAt = getCurrentDate();
+      if (this.isExist({ username: userInput.username })) {
+        if (user?.username !== userInput.username) {
+          throw new HttpError('User already registered', 409);
         }
-
-        return isMatch;
       }
-    );
 
-    return updatedUser;
+      const updatedUser: User | undefined = this.list.find(
+        (user: User): boolean => {
+          const isMatch: boolean = user.id === id;
+
+          if (isMatch) {
+            user.name = userInput.name;
+            user.username = userInput.username;
+            user.age = userInput.age;
+            user.updatedAt = getCurrentDate();
+          }
+
+          return isMatch;
+        }
+      );
+
+      return updatedUser;
+    } catch (e) {
+      throw e;
+    }
   }
 
   public selectAll(): User[] {

@@ -13,7 +13,7 @@ export async function postUser(
     const { name, username, age } = req.body;
     const user = await users.insert({ name, username, age });
 
-    res.status(200).json({ success: true, user });
+    res.status(201).json({ success: true, user });
   } catch (e) {
     next(e);
   }
@@ -73,7 +73,9 @@ export async function deleteUser(
     const id = Number(req.params.id);
     await users.delete(id);
 
-    res.status(200).json({ success: true });
+    res
+      .status(200)
+      .json({ success: true, message: 'User deleted successfully' });
   } catch (e) {
     next(e);
   }
