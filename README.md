@@ -21,7 +21,7 @@ Runs app built from `build` folder.
 
 ## Available routes
 
-`POST http://localhost:5000/api/users`
+**`POST`** `http://localhost:5000/api/users`
 
 Add a user\
 Required fields:
@@ -32,15 +32,15 @@ Required fields:
 | `username` | `string`  | `true`   |
 | `age`      | `number`  | `true`   |
 
-`GET http://localhost:5000/api/users`
+**`GET`** `http://localhost:5000/api/users`
 
 Get all users
 
-`GET http://localhost:5000/api/users/:id`
+**`GET`** `http://localhost:5000/api/users/:id`
 
 Get a user by id
 
-`PUT http://localhost:5000/api/users/:id`
+**`PUT`** `http://localhost:5000/api/users/:id`
 
 Update a user by id\
 Required fields:
@@ -51,6 +51,6 @@ Required fields:
 | `username` | `string`  | `true`   |
 | `age`      | `number`  | `true`   |
 
-`DELETE http://localhost:5000/api/users/:id`
+**`DELETE`** `http://localhost:5000/api/users/:id`
 
 Delete a user by id
