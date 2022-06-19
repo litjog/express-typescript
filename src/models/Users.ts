@@ -1,4 +1,3 @@
-import { ZodError } from 'zod';
 import userSchema from '../common/userSchema';
 import getCurrentDate from '../helpers/getCurrentDate';
 import HttpError from '../httpError';
