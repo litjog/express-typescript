@@ -23,7 +23,7 @@ Runs app built from `build` folder.
 
 `POST http://localhost:5000/api/users`
 
-Add a user to the application\
+Add a user\
 Required fields:
 
 | Field      | Data type | Required |
@@ -38,11 +38,11 @@ Get all users
 
 `GET http://localhost:5000/api/users/:id`
 
-Get a user by id.
+Get a user by id
 
 `PUT http://localhost:5000/api/users/:id`
 
-Update a user by id.\
+Update a user by id\
 Required fields:
 
 | Field      | Data type | Required |
@@ -53,4 +53,4 @@ Required fields:
 
 `DELETE http://localhost:5000/api/users/:id`
 
-Delete a user by id.
+Delete a user by id
