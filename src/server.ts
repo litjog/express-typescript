@@ -40,7 +40,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
   if (err instanceof ZodError) {
     const issues = err.errors.map((error) => ({
-      prop: error.path[0],
+      prop: error.path,
       message: error.message,
     }));
 

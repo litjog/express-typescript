@@ -1,5 +1,5 @@
 interface Issue {
-  prop: (string | number)[] | string | number;
+  prop: (string | number)[];
   message: string;
 }
 
@@ -16,7 +16,7 @@ export default class HttpError extends Error {
   constructor(
     public message: string,
     public status: number,
-    public issues?: Record<string, any>[]
+    public issues?: Issue[]
   ) {
     super(message);
     this.success = false;
