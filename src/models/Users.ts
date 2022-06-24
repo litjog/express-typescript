@@ -11,18 +11,11 @@ export interface User {
   updatedAt: string;
 }
 
-interface Where {
-  id?: number;
-  username?: string;
-  name?: string;
-  age?: number;
-}
-
 interface CallbackFn {
-  (user: Pick<Where, 'name' | 'age'>): boolean;
+  (user: Pick<User, 'name' | 'age'>): boolean;
 }
 
-type WhereUnique = Pick<Where, 'id' | 'username'>;
+type Where = Partial<Pick<User, 'id' | 'username'>>;
 
 export default class Users {
   private currentId: number = 1;
@@ -112,8 +105,8 @@ export default class Users {
     return this.list.filter(({ name, age }: User) => callbackFn({ name, age }));
   }
 
-  public selectOne(where: WhereUnique): User | undefined {
-    const [key] = Object.keys(where) as (keyof WhereUnique)[];
+  public selectOne(where: Where): User | undefined {
+    const [key] = Object.keys(where) as (keyof Where)[];
     return this.list.find((user: User) => user[key] === where[key]);
   }
 
@@ -125,8 +118,8 @@ export default class Users {
     return this.selectOne({ id });
   }
 
-  public isExist(where: WhereUnique): boolean {
-    const [key] = Object.keys(where) as (keyof WhereUnique)[];
+  public isExist(where: Where): boolean {
+    const [key] = Object.keys(where) as (keyof Where)[];
     return this.list.some((user: User) => user[key] === where[key]);
   }
 
